@@ -1,17 +1,15 @@
-# threatspec project Threat Model
-
 A threatspec project.
 
 # Threats
 
 | Type | Component | Threat | Description | Test Count | File | Source |
 | ---- | --------- | ------ | ----------- | ---------- | ---- | ------ |
-| Exposure | WebApp:App | XSS injection | insufficient input validation | 0 | <pre>/home/zeroxten/Downloads/src/t
+| Exposure | WebApp:App | XSS injection | insufficient input validation | 0 | <code>/home/zeroxten/Downloads/src/t
 hreatspec/threatspec_examples/
-simple_web.go:53</pre> | func editHandler(w http.ResponseWriter, r *http.Request, title string) { |
-| Exposure | WebApp:App | content injection | insufficient input validation | 0 | <pre>/home/zeroxten/Downloads/src/t
+simple_web.go:53</code> | func editHandler(w http.ResponseWriter, r *http.Request, title string) { |
+| Exposure | WebApp:App | content injection | insufficient input validation | 0 | <code>/home/zeroxten/Downloads/src/t
 hreatspec/threatspec_examples/
-simple_web.go:62</pre> | func saveHandler(w http.ResponseWriter, r *http.Request, title string) { |
+simple_web.go:62</code> | func saveHandler(w http.ResponseWriter, r *http.Request, title string) { |
 | Acceptance | WebApp:FileSystem | arbitrary file writes | filename restrictions | 0 | /home/zeroxten/Downloads/src/threatspec/threatspec_examples/simple_web.go:27 | func (p *Page) save() error { |
 | Acceptance | WebApp:FileSystem | arbitrary file reads | filename restrictions | 0 | /home/zeroxten/Downloads/src/threatspec/threatspec_examples/simple_web.go:34 | func loadPage(title string) (*Page, error) { |
 | Transfer | User:Browser (from WebApp:Web) | @cwe_319_cleartext_transmission | non-sensitive information | 0 | /home/zeroxten/Downloads/src/threatspec/threatspec_examples/simple_web.go:98 | func main() { |
