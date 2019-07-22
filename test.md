@@ -152,6 +152,7 @@ HTTP:8080
 ## privilege escalation
 
 ## Cross-site Scripting
+| Custom | Value |
 | --- | --- |
 | Impact | high |
 
