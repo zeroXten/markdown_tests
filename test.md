@@ -152,9 +152,9 @@ HTTP:8080
 ## privilege escalation
 
 ## Cross-site Scripting
-| Custom | Value |
+| Custom Key | Value |
 | --- | --- |
-| Impact | high |
+| **Impact** | high |
 
 
 ### Description
@@ -169,7 +169,9 @@ accounted for roughly 84% of all security vulnerabilities documented by Symantec
 ## @cwe_319_cleartext_transmission
 
 ## arbitrary file writes
-| Impact | high |
+| Custom Key | Value |
+| --- | --- |
+| **Impact** | high |
 
 
 ### Description
@@ -188,7 +190,9 @@ An attacker can make arbitrary changes to files on the file system, for example 
 
 
 ## Cross-site scripting
-| Impact | high |
+| Custom Key | Value |
+| --- | --- |
+| **Impact** | high |
 
 
 
@@ -206,7 +210,9 @@ accounted for roughly 84% of all security vulnerabilities documented by Symantec
 
 
 ## Arbitrary file writes
-| Impact | high |
+| Custom Key | Value |
+| --- | --- |
+| **Impact** | high |
 
 
 
