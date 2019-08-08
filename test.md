@@ -1,7 +1,8 @@
 # Myapp Example Project Threat Model
 
 An example project.
-# Threats
+
+##Threats
 | Name | Description | Project ID |
 | ---- | ----------- | ---------- |
 | Arbitrary File Writes | An attacker can make arbitrary changes to files on the file system, for example overwriting /etc/hosts. | MyApp Example Project |
