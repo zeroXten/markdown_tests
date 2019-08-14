@@ -1,22 +1,152 @@
+
 # Myapp Example Project Threat Model
 
 An example project.
 
 ## Exposures
 
-### Cross-site Scripting against WebApp:App
+The following threats against components have not been mitigated.
 
-### content injection against WebApp:App
+### Cross-Site Scripting against WebApp:App
+
+Insufficient input validation
+
+```
+// @exposes WebApp:App to #xss with insufficient input validation
+func editHandler(w http.ResponseWriter, r *http.Request, title string) {
+    p, err := loadPage(title)
+    if err != nil {
+        p = &Page{Title: title}
+    }
+
+```
+...pec/threatspec_examples/go_source/simple_web.go:1 in MyApp Example Project
+
+### Content Injection against WebApp:App
+
+Insufficient input validation
+
+```
+// @exposes WebApp:App to content injection with insufficient input validation
+func saveHandler(w http.ResponseWriter, r *http.Request, title string) {
+    body := r.FormValue("body")
+    p := &Page{Title: title, Body: []byte(body)}
+    err := p.save()
+    if err != nil {
+
+```
+...pec/threatspec_examples/go_source/simple_web.go:1 in MyApp Example Project
 
 ## Acceptances
 
+The following threats against components have been accepted and will not be mitigated.
+
+### Arbitrary File Writes against WebApp:FileSystem
+
+Filename restrictions that limit the possible filenames written to by an attacker
+
+```
+// @accepts #file_writes to WebApp:FileSystem with filename restrictions that limit the possible filenames written to by an attacker
+func (p *Page) save() error {
+    filename := p.Title + ".txt"
+    return ioutil.WriteFile(filename, p.Body, 0600)
+}
+
+
+```
+...pec/threatspec_examples/go_source/simple_web.go:1 in MyApp Example Project
+
+### Arbitrary File Reads against WebApp:FileSystem
+
+Filename restrictions
+
+```
+// @accepts arbitrary file reads to WebApp:FileSystem with filename restrictions
+func loadPage(title string) (*Page, error) {
+    filename := title + ".txt"
+    body, err := ioutil.ReadFile(filename)
+    if err != nil {
+        return nil, err
+
+```
+...pec/threatspec_examples/go_source/simple_web.go:1 in MyApp Example Project
+
 ## Transfers
+These threats have been transfered from one component to another, and are expected to be handled in some way by the destination component.
+
+### @cwe_319_cleartext_transmission from WebApp:Web to User:Browser
+
+Non-sensitive information
+
+```
+// @transfers @cwe_319_cleartext_transmission from WebApp:Web to User:Browser with non-sensitive information
+func main() {
+    flag.Parse()
+    http.HandleFunc("/view/", makeHandler(viewHandler))
+    http.HandleFunc("/edit/", makeHandler(editHandler))
+    http.HandleFunc("/save/", makeHandler(saveHandler))
+
+```
+...pec/threatspec_examples/go_source/simple_web.go:1 in MyApp Example Project
+
 
 ## Mitigations
+These threats have been mitigated by a control, and possibly have tests to ensure those mitigates are behaving as expected.
+
+### Resource Access Abuse against WebApp:Web mitigated by Basic Input Validation
+
+
+
+```
+// @mitigates WebApp:Web against resource access abuse with basic input validation
+func makeHandler(fn func(http.ResponseWriter, *http.Request, string)) http.HandlerFunc {
+    return func(w http.ResponseWriter, r *http.Request) {
+        m := validPath.FindStringSubmatch(r.URL.Path)
+        if m == nil {
+            http.NotFound(w, r)
+
+```
+...pec/threatspec_examples/go_source/simple_web.go:1 in MyApp Example Project
+
+### Privilege Escalation against WebApp:Web mitigated by Non-Privileged Port
+
+
+
+```
+// @mitigates WebApp:Web against privilege escalation with non-privileged port
+func main() {
+    flag.Parse()
+    http.HandleFunc("/view/", makeHandler(viewHandler))
+    http.HandleFunc("/edit/", makeHandler(editHandler))
+    http.HandleFunc("/save/", makeHandler(saveHandler))
+
+```
+...pec/threatspec_examples/go_source/simple_web.go:1 in MyApp Example Project
 
 ## Reviews
+The following reviews have been created to track concerns, assumptions, questions that may require further investigation or research.
+
+### WebApp:Web
+### Review
+Is this a security feature?
+
+```
+        err = ioutil.WriteFile("final-port.txt", []byte(l.Addr().String()), 0644) // @review WebApp:Web Is this a security feature?
+        if err != nil {
+            log.Fatal(err)
+        }
+        s := &http.Server{}
+        s.Serve(l)
+
+```
+...les/go_source/simple_web.go:1 in MyApp Example Project
 
 ## Connections
+This is a list of connectivity between components. This could be network connectivity, logical, data flow or anything else.
+
+| Source component | Destination component | Details | Description | Custom | Source |
+| ---------------- | --------------------- | ------- | ----------- | ------ | ------ |
+| User:Browser | WebApp:Web | HTTP:8080 |  |  | MyApp Example Project<br><br>...les/go_source/simple_web.go:1
 
 ## Components
 
@@ -47,11 +177,5 @@ An example project.
 | ------- | ----------- | ----- | ------ | ------ |
 | **basic input validation**<br><br>(#basic_input_validation) |  |  |  | MyApp Example Project<br><br>...les/go_source/simple_web.go:1 |
 | **non-privileged port**<br><br>(#nonprivileged_port) |  |  |  | MyApp Example Project<br><br>...les/go_source/simple_web.go:1 |
-
-
-
-
-
-
 
 
